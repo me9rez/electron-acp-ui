@@ -118,4 +118,13 @@ export class AgentService extends EventEmitter {
   listRunningAgents(): string[] {
     return Array.from(this.agents.keys())
   }
+
+  dispose(): void {
+    for (const [agentId, agent] of this.agents.entries()) {
+      this.agents.delete(agentId)
+      if (!agent.child.killed) {
+        agent.child.kill()
+      }
+    }
+  }
 }

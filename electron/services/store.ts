@@ -24,6 +24,8 @@ export class StoreService {
       const parsed = JSON.parse(content)
       return parsed && typeof parsed === 'object' ? parsed as KVStoreRecord : {}
     } catch {
+      await fs.mkdir(path.dirname(filePath), { recursive: true })
+      await fs.writeFile(filePath, '{}', 'utf8')
       return {}
     }
   }

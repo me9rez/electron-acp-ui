@@ -42,11 +42,16 @@ function normalizeAgentConfig(input: AgentConfig): AgentConfig {
 export class ConfigService extends EventEmitter {
   private config: AgentsConfig = { agents: {} }
   private watcher: fs.FSWatcher | null = null
+  private saveInFlight = false
+  private reloadTimer: NodeJS.Timeout | null = null
   readonly configPath: string
 
   constructor() {
     super()
-    this.configPath = path.join(os.homedir(), '.config', 'acp-ui', 'agents.json')
+    const baseDir = process.platform === 'win32'
+      ? process.env.APPDATA ?? path.join(os.homedir(), 'AppData', 'Roaming')
+      : path.join(os.homedir(), '.config')
+    this.configPath = path.join(baseDir, 'acp-ui', 'agents.json')
   }
 
   async init(): Promise<void> {
@@ -107,7 +112,14 @@ export class ConfigService extends EventEmitter {
   }
 
   private async save(): Promise<void> {
-    await fsp.writeFile(this.configPath, JSON.stringify(this.config, null, 2), 'utf8')
+    this.saveInFlight = true
+    try {
+      await fsp.writeFile(this.configPath, JSON.stringify(this.config, null, 2), 'utf8')
+    } finally {
+      setTimeout(() => {
+        this.saveInFlight = false
+      }, 100)
+    }
   }
 
   private async readFromDisk(): Promise<AgentsConfig> {
@@ -123,14 +135,23 @@ export class ConfigService extends EventEmitter {
   private setupWatcher(): void {
     this.watcher?.close()
     this.watcher = fs.watch(path.dirname(this.configPath), async (_, fileName) => {
-      if (fileName !== path.basename(this.configPath)) {
+      const normalizedFileName = typeof fileName === 'string' ? fileName : ''
+      if (normalizedFileName !== path.basename(this.configPath)) {
         return
       }
-      try {
-        this.config = await this.readFromDisk()
-        this.emit('config-changed', this.config)
-      } catch {
+      if (this.saveInFlight) {
+        return
       }
+      if (this.reloadTimer) {
+        clearTimeout(this.reloadTimer)
+      }
+      this.reloadTimer = setTimeout(async () => {
+        try {
+          this.config = await this.readFromDisk()
+          this.emit('config-changed', this.config)
+        } catch {
+        }
+      }, 100)
     })
   }
 }

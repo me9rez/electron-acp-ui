@@ -45,6 +45,10 @@ app.on('activate', async () => {
   }
 })
 
+app.on('before-quit', () => {
+  services.agents.dispose()
+})
+
 app.whenReady().then(async () => {
   await services.config.init()
   registerIpcHandlers(services)

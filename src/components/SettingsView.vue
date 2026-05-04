@@ -1,10 +1,11 @@
 <script setup lang="ts">
-import { ref, computed } from 'vue';
+import { ref, computed, onMounted } from 'vue';
 import { useConfigStore } from '../stores/config';
-import { addAgent, removeAgent, updateAgent } from '../lib/host';
+import { addAgent, removeAgent, updateAgent, getAppVersion, getMachineId } from '../lib/host';
 import { getTransportKind, type AgentTransportKind } from '../lib/types';
 import { restrictedTransports } from '../lib/platform';
 import EnvVarEditor from './EnvVarEditor.vue';
+import { isTelemetryEnabled, setTelemetryEnabled } from '../lib/telemetry';
 
 const emit = defineEmits<{
   (e: 'close'): void;
@@ -59,6 +60,27 @@ const formUrl = ref('');
 const formHeaders = ref<Record<string, string>>({});
 const formError = ref('');
 const isSubmitting = ref(false);
+const appVersion = ref('');
+const machineId = ref('');
+const telemetryEnabled = ref(isTelemetryEnabled());
+
+onMounted(async () => {
+  try {
+    appVersion.value = await getAppVersion();
+  } catch {
+    appVersion.value = '';
+  }
+
+  try {
+    machineId.value = await getMachineId();
+  } catch {
+    machineId.value = '';
+  }
+});
+
+function handleTelemetryToggle() {
+  setTelemetryEnabled(telemetryEnabled.value);
+}
 
 function resetForm() {
   formName.value = '';
@@ -350,6 +372,16 @@ async function handleDelete(name: string) {
           <p class="config-path">{{ configStore.configPath }}</p>
           <small>Changes to this file are automatically reloaded.</small>
         </section>
+
+        <section class="config-section">
+          <h3>App</h3>
+          <p class="config-path">Version: {{ appVersion || 'Unavailable' }}</p>
+          <p class="config-path">Machine ID: {{ machineId || 'Unavailable' }}</p>
+          <label class="telemetry-toggle">
+            <input v-model="telemetryEnabled" type="checkbox" @change="handleTelemetryToggle" />
+            <span>Enable telemetry</span>
+          </label>
+        </section>
       </div>
     </div>
   </div>
@@ -639,14 +671,24 @@ async function handleDelete(name: string) {
 
 .config-path {
   font-family: monospace;
-  font-size: 0.8rem;
-  color: var(--text-secondary);
-  background: var(--bg-sidebar);
-  padding: 0.5rem;
-  border-radius: 4px;
   word-break: break-all;
-  margin-bottom: 0.25rem;
+  background: var(--bg-sidebar);
+  padding: 0.75rem;
+  border-radius: 4px;
+  margin: 0.5rem 0;
 }
+
+.telemetry-toggle {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 0.75rem;
+}
+
+.telemetry-toggle input {
+  width: auto;
+}
+
 
 .config-section small {
   font-size: 0.75rem;
