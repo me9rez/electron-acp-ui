@@ -3,37 +3,8 @@ import path from 'node:path'
 import log from 'electron-log/main'
 import { APP_ROOT, MAIN_DIST, RENDERER_DIST } from './pathe'
 
-const logPath = path.join(app.getPath('documents'), `${app.getName()}`, `logs/test.log`)
 
-log.transports.file.resolvePathFn = () => logPath
-log.initialize();
-
-const createLogger = (id: string) => {
-  const anotherLogger = log.create({ logId: id });
-  anotherLogger.transports.file.resolvePathFn = () => logPath
-  anotherLogger.initialize({ preload: true })
-  return anotherLogger
-}
-
-// const logger = createLogger(app.getName())
-
-// const require = createRequire(import.meta.url)
-// const __dirname = path.dirname(fileURLToPath(import.meta.url))
-
-
-// The built directory structure
-//
-// ├─┬─┬ dist
-// │ │ └── index.html
-// │ │
-// │ ├─┬ dist-electron
-// │ │ ├── main.js
-// │ │ └── preload.mjs
-// │
-
-
-
-async function createWindow(name: "home" | "update") {
+async function createWindow(name: "home") {
   const win = new BrowserWindow({
     webPreferences: {
       preload: path.join(MAIN_DIST, './preload/preload.js'),
@@ -51,7 +22,7 @@ async function createWindow(name: "home" | "update") {
 }
 
 
-async function loadPage(win: BrowserWindow, name: "home" | "update") {
+async function loadPage(win: BrowserWindow, name: "home") {
   if (app.isPackaged) {
     await win.loadFile(path.join(RENDERER_DIST, "pages", `${name}.html`))
   } else {
@@ -78,20 +49,11 @@ app.on('activate', async () => {
 })
 
 app.whenReady().then(async () => {
-  await createWindow("home")
   handleIPC()
+  await createWindow("home")
 })
 
 
 function handleIPC() {
-  ipcMain.handle('save-log', () => {
-    log.info('save-log');
-  })
-  ipcMain.handle('create-update-window', async () => {
-    await createWindow('update')
-  })
-  ipcMain.handle('insert', async (evt, ...args) => {
-  })
-  ipcMain.handle('query', async (evt, ...args) => {
-  })
+
 }

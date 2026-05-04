@@ -1,57 +1,38 @@
 {
-  "name": "rsbuild-electron-example",
+  "name": "electron-acp-ui",
   "version": "1.0.0",
   "main": "dist-electron/main/main.js",
   "scripts": {
     "dev": "parallel",
     "dev:renderer": "rsbuild dev",
     "dev:main": "chcp 65001 && electron ./dist-electron/main/main.js",
-    "svelte-check": "svelte-check --tsconfig ./tsconfig.json",
+    "ts-check": "svelte-check --tsconfig ./tsconfig.json",
     "build": "rimraf dist dist-electron && rsbuild build",
     "build:dir": "pnpm build && cross-env HTTPS_PROXY=http://127.0.0.1:7890 electron-builder --dir",
-    "build:win": "pnpm build && cross-env HTTPS_PROXY=http://127.0.0.1:7890 electron-builder --win",
-    "db-gen": "prisma init --with-model --datasource-provider sqlite",
-    "db-push": "prisma migrate dev --name init",
-    "db-studio": "prisma studio"
+    "build:win": "pnpm build && cross-env HTTPS_PROXY=http://127.0.0.1:7890 electron-builder --win"
   },
   "devDependencies": {
     "@electron-toolkit/preload": "^3.0.2",
-    "@faker-js/faker": "^10.2.0",
-    "@rsbuild/core": "^1.7.2",
-    "@rsbuild/plugin-svelte": "^1.0.12",
-    "@types/node": "^25.0.9",
-    "chokidar": "^5.0.0",
+    "@rsbuild/core": "^2.0.3",
+    "@rsbuild/plugin-vue": "^1.2.7",
+    "@types/node": "^25.6.0",
     "cross-env": "^10.1.0",
-    "dayjs": "^1.11.19",
-    "electron": "^40.0.0",
-    "electron-builder": "^26.4.0",
+    "dayjs": "^1.11.20",
+    "electron": "^41.5.0",
+    "electron-builder": "^26.8.1",
     "electron-log": "^5.4.3",
-    "es-toolkit": "^1.44.0",
+    "es-toolkit": "^1.46.1",
     "execa": "^9.6.1",
     "parallel-wait-run": "^0.2.2",
-    "rimraf": "^6.1.2",
-    "svelte": "^5.46.4",
-    "svelte-check": "^4.3.5",
+    "rimraf": "^6.1.3",
     "tsx": "^4.21.0",
-    "typescript": "^5.9.3"
-  },
-  "dependencies": {
-    "@prisma/client": "^7.2.0",
-    "prisma": "^7.2.0"
+    "typescript": "^6.0.3",
+    "vue": "^3.5.33"
   },
   "pnpm": {
     "onlyBuiltDependencies": [
-      "@prisma/client",
-      "@prisma/engines",
       "electron",
-      "prisma"
-    ],
-    "ignoredBuiltDependencies": [
-      "core-js",
-      "core-js-pure",
-      "esbuild",
-      "parallel-wait-run",
-      "svelte-preprocess"
+      "electron-winstaller"
     ]
   }
 }

@@ -1,5 +1,5 @@
 import { defineConfig, type OutputConfig, type EnvironmentConfig } from '@rsbuild/core'
-import { pluginSvelte } from '@rsbuild/plugin-svelte';
+import { pluginVue } from '@rsbuild/plugin-vue';
 
 const getElectronOutput = (type: "main" | "preload") => {
     const config: OutputConfig = {
@@ -47,12 +47,11 @@ export default defineConfig({
         "electron-preload": getElectronConfig('preload'),
         "web": {
             plugins: [
-                pluginSvelte(),
+                pluginVue(),
             ],
             source: {
                 entry: {
                     home: "./src/index.ts",
-                    update: "./src/pages/update.ts"
                 }
             },
             output: {
@@ -66,7 +65,7 @@ export default defineConfig({
                 }
             },
             html: {
-                template: "./pages/template.html"
+                template: "./template/index.html"
             },
             tools: {
                 rspack: {
