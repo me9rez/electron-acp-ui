@@ -571,12 +571,11 @@ export const useSessionStore = defineStore('session', () => {
       if (!agentConfig) {
         throw new Error(`Agent '${savedSession.agentName}' not found in config`);
       }
-      const transportKind = getTransportKind(agentConfig);
-      if (transportKind === 'stdio') {
-        throw new Error('Resuming stdio sessions is not supported yet in the Electron port. Please start a new session.');
-      }
 
       // Create ACP client bridge (transport selected based on agent config).
+      // For stdio this intentionally spawns a fresh local agent process and
+      // then reattaches to the saved ACP session via `session/load`, matching
+      // the existing Tauri behavior.
       acpClient = await createAcpClient({
         name: savedSession.agentName,
         config: agentConfig,
