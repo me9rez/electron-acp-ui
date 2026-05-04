@@ -8,15 +8,16 @@ import type { AgentConfig, AgentsConfig } from './types'
 function getDefaultAgents(): AgentsConfig {
   return {
     agents: {
-      'GitHub Copilot': { command: 'npx', args: ['@github/copilot-language-server@latest', '--acp'], env: {} },
-      'Claude Code': { command: 'npx', args: ['@zed-industries/claude-code-acp@latest'], env: {} },
-      'Gemini CLI': { command: 'npx', args: ['@google/gemini-cli@latest', '--experimental-acp'], env: {} },
-      'Qwen Code': { command: 'npx', args: ['@qwen-code/qwen-code@latest', '--acp', '--experimental-skills'], env: {} },
-      'Auggie CLI': { command: 'npx', args: ['@augmentcode/auggie@latest', '--acp'], env: { AUGMENT_DISABLE_AUTO_UPDATE: '1' } },
-      'Qoder CLI': { command: 'npx', args: ['@qoder-ai/qodercli@latest', '--acp'], env: {} },
-      'Codex CLI': { command: 'npx', args: ['@zed-industries/codex-acp@latest'], env: {} },
-      'OpenCode': { command: 'npx', args: ['opencode-ai@latest', 'acp'], env: {} },
-      'OpenClaw': { command: 'npx', args: ['openclaw', 'acp'], env: {} },
+      // 'GitHub Copilot': { command: 'npx', args: ['@github/copilot-language-server@latest', '--acp'], env: {} },
+      // 'Claude Code': { command: 'npx', args: ['@zed-industries/claude-code-acp@latest'], env: {} },
+      // 'Gemini CLI': { command: 'npx', args: ['@google/gemini-cli@latest', '--experimental-acp'], env: {} },
+      // 'Qwen Code': { command: 'npx', args: ['@qwen-code/qwen-code@latest', '--acp', '--experimental-skills'], env: {} },
+      // 'Auggie CLI': { command: 'npx', args: ['@augmentcode/auggie@latest', '--acp'], env: { AUGMENT_DISABLE_AUTO_UPDATE: '1' } },
+      // 'Qoder CLI': { command: 'npx', args: ['@qoder-ai/qodercli@latest', '--acp'], env: {} },
+      // 'Codex CLI': { command: 'npx', args: ['@zed-industries/codex-acp@latest'], env: {} },
+      // 'OpenCode': { command: 'npx', args: ['opencode-ai@latest', 'acp'], env: {} },
+      // 'OpenClaw': { command: 'npx', args: ['openclaw', 'acp'], env: {} },
+      'OpenCode': { command: 'opencode', args: ['acp'], env: {} },
     },
   }
 }

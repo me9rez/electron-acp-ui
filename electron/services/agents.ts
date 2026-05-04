@@ -37,7 +37,7 @@ export class AgentService extends EventEmitter {
     const agentId = randomUUID()
 
     const child = isWindows()
-      ? spawn('cmd.exe', ['/C', command, ...args], {
+      ? spawn('pwsh.exe', ['-Command', command, ...args], {
           env: { ...process.env, ...env },
           stdio: 'pipe',
           windowsHide: true,
