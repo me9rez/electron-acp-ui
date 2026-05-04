@@ -116,7 +116,7 @@ onMounted(async () => {
   
   // Initialize telemetry (check user preference)
   const telemetryEnabled = await prefsStore.get<boolean>('telemetryEnabled') ?? true;
-  await initTelemetry(telemetryEnabled);
+  // await initTelemetry(telemetryEnabled);
   
   // Initialize stores
   await configStore.loadConfig();
