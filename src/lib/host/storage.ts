@@ -1,5 +1,16 @@
 import { isElectronHost, isDesktop } from '../platform';
 
+function toSerializable<T>(value: T): T {
+  if (typeof structuredClone === 'function') {
+    try {
+      return structuredClone(value);
+    } catch {
+    }
+  }
+
+  return JSON.parse(JSON.stringify(value)) as T;
+}
+
 export interface KVStore {
   get<T>(key: string): Promise<T | null>;
   set(key: string, value: unknown): Promise<void>;
@@ -59,7 +70,7 @@ class ElectronKVStore implements KVStore {
   }
 
   async save(): Promise<void> {
-    await window.acpHost.saveStore(this.name, this.data);
+    await window.acpHost.saveStore(this.name, toSerializable(this.data));
   }
 }
 

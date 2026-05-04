@@ -109,7 +109,16 @@ export const useSessionStore = defineStore('session', () => {
 
   async function saveSessionsToStore() {
     if (store) {
-      await store.set('sessions', savedSessions.value);
+      const snapshot = savedSessions.value.map((session) => ({
+        id: session.id,
+        agentName: session.agentName,
+        sessionId: session.sessionId,
+        title: session.title,
+        lastUpdated: session.lastUpdated,
+        cwd: session.cwd,
+        supportsLoadSession: session.supportsLoadSession,
+      }));
+      await store.set('sessions', snapshot);
       await store.save();
     }
   }
