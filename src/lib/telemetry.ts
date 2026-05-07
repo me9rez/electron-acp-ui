@@ -6,7 +6,7 @@ let appInsights: ApplicationInsights | null = null;
 let isEnabled = true;
 let machineId: string | null = null;
 
-const CONNECTION_STRING = 'InstrumentationKey=70b098b2-fcae-4834-867f-69554662910c;IngestionEndpoint=https://eastus-8.in.applicationinsights.azure.com/;LiveEndpoint=https://eastus.livediagnostics.monitor.azure.com/;ApplicationId=d2f5a78f-257e-4748-bd25-509258a27bd2';
+const CONNECTION_STRING = '';
 
 /**
  * Initialize Application Insights telemetry
