@@ -52,7 +52,7 @@ export class ConfigService extends EventEmitter {
     const baseDir = process.platform === 'win32'
       ? process.env.APPDATA ?? path.join(os.homedir(), 'AppData', 'Roaming')
       : path.join(os.homedir(), '.config')
-    this.configPath = path.join(baseDir, 'acp-ui', 'agents.json')
+    this.configPath = path.join(baseDir, 'electron-acp-ui', 'agents.json')
   }
 
   async init(): Promise<void> {

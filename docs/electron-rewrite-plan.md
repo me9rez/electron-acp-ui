@@ -2,11 +2,11 @@
 
 ## 目标
 
-将 `D:\Code\Github Repo\acp-ui` 的 Tauri 应用以 Electron 框架在当前仓库中重写实现，优先采用“保留现有 Vue/Pinia 前端，替换 Tauri/Rust 宿主层”的迁移策略。
+将 `acp-ui` 的 Tauri 应用以 Electron 框架在当前仓库中重写实现，优先采用“保留现有 Vue/Pinia 前端，替换 Tauri/Rust 宿主层”的迁移策略。
 
 ## 总体策略
 
-- 复用 `acp-ui` 现有前端应用结构、Vue 组件、Pinia stores、ACP 协议桥接逻辑。
+- 复用 `https://github.com/formulahendry/acp-ui` 现有前端应用结构、Vue 组件、Pinia stores、ACP 协议桥接逻辑。
 - 将所有 Tauri / Rust 宿主能力重写到 Electron `main` / `preload` / Node 服务层。
 - 尽量保持前端调用接口不变，优先在 `src/lib/host/*` 层做兼容替换，降低 UI 和业务逻辑改动范围。
 - 分阶段落地：先打通主链路，再补齐增强能力与细节兼容。
